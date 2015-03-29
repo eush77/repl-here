@@ -10,7 +10,12 @@ var fs = require('fs'),
 module.exports = function (repl, dir) {
   fs.readdir(path.join(dir, 'node_modules'), function (err, modules) {
     modules.forEach(function (module) {
-      repl.context[camelCase(module)] = require(resolveFrom(dir, module));
+      try {
+        repl.context[camelCase(module)] = require(resolveFrom(dir, module));
+      }
+      catch (e) {
+        console.log('Module failed to load: ' + module);
+      }
     });
   });
 };

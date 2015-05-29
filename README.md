@@ -17,9 +17,11 @@ Usage:  repl-here
 
 ## API
 
-### `replHere(repl, basedir)`
+### `replHere(repl, basedir, [errorCallback])`
 
 Require all modules from `$basedir/node_modules` into the repl (first argument).
+
+Optional `errorCallback(err, name)` is called whenever module fails to load.
 
 ## Why not X?
 

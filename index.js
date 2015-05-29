@@ -9,7 +9,9 @@ var fs = require('fs'),
     path = require('path');
 
 
-module.exports = function (repl, dir) {
+module.exports = function (repl, dir, errorCallback) {
+  errorCallback = errorCallback || Function.prototype;
+
   fs.readdir(path.join(dir, 'node_modules'), function (err, filenames) {
     filenames
       .filter(isModuleName)
@@ -18,7 +20,7 @@ module.exports = function (repl, dir) {
           repl.context[camelCase(module)] = require(resolveFrom(dir, module));
         }
         catch (e) {
-          console.log('Module failed to load: ' + module);
+          errorCallback(e, module);
         }
       });
   });

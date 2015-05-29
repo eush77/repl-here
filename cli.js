@@ -14,7 +14,9 @@ var usage = function (code) {
 
 var main = function () {
   var repl = Repl.start('> ');
-  replHere(repl, process.cwd());
+  replHere(repl, process.cwd(), function (err, module) {
+    console.error('Module failed to load: ' + module);
+  });
 };
 
 

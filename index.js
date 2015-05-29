@@ -23,7 +23,9 @@ module.exports = function (repl, dir) {
       .filter(isModuleName)
       .forEach(function (module) {
         try {
-          repl.context[camelCase(module)] = require(resolveFrom(dir, module));
+          var name = camelCase(module);
+          repl.context[name] = require(resolveFrom(dir, module));
+          ee.emit('load', module, name);
         }
         catch (e) {
           ee.emit('fail', err, module);

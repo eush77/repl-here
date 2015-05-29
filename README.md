@@ -23,13 +23,21 @@ Require all modules from `$basedir/node_modules` into the repl (first argument).
 
 Returns EventEmitter.
 
+### Event: `load`
+
+```
+ee.on('fail', function(module, name))
+```
+
+Emitted if `module` is loaded as `name`.
+
 ### Event: `fail`
 
 ```
 ee.on('fail', function(err, module))
 ```
 
-Emitted whenever module fails to load.
+Emitted whenever `module` fails to load.
 
 ### Event: `end`
 

@@ -12,8 +12,10 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 ## CLI
 
 ```
-Usage:  repl-here
+Usage:  repl-here [-v | --verbose]
 ```
+
+`--verbose` flag prints a table describing how a particular module is named inside the REPL. Module names are effectively camel-cased versions of module names.
 
 ## API
 
@@ -55,12 +57,11 @@ ee.on('error', function(err))
 
 Emitted if a fatal error occurred. At this point `repl` may be half-way populated or left intact.
 
-## Why not X?
+## Related
 
-- [repl-it](http://npm.im/repl-it): works in the context of a project, hence walks up the directory tree, parses `package.json` for dependencies and devDependencies, has options like loading main project files, etc.
+- [repl-it](http://npm.im/repl-it) works in the context of a project. It walks up the directory tree, parses `package.json` for dependencies and devDependencies, has options like loading main project files, etc.
 
-- [scratchy](http://npm.im/scratchy): does not work quite as advertised because it also walks up the directory tree and so you can't `npm install foo` and load it into the repl immediately afterwards (which is kind of a problem this module is trying to solve).
-
+- [scratchy](http://npm.im/scratchy) is sort of a hybrid of `repl-it` and `repl-here`: it walks up the directory tree as `repl-it` does but requires everything inside `node_modules` just like `repl-here`. This means you can't simply `npm install foo` and load it into the repl immediately afterwards (which is the problem this module is trying to solve).
 
 ## Install
 

@@ -6,13 +6,19 @@ var camelCase = require('camel-case'),
     resolveFrom = require('resolve-from');
 
 var fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    EventEmitter = require('events');
 
 
-module.exports = function (repl, dir, errorCallback) {
-  errorCallback = errorCallback || Function.prototype;
+module.exports = function (repl, dir) {
+  var ee = new EventEmitter;
 
   fs.readdir(path.join(dir, 'node_modules'), function (err, filenames) {
+    if (err) {
+      ee.emit('error', err);
+      return;
+    }
+
     filenames
       .filter(isModuleName)
       .forEach(function (module) {
@@ -20,8 +26,12 @@ module.exports = function (repl, dir, errorCallback) {
           repl.context[camelCase(module)] = require(resolveFrom(dir, module));
         }
         catch (e) {
-          errorCallback(e, module);
+          ee.emit('fail', err, module);
         }
       });
+
+    ee.emit('end');
   });
+
+  return ee;
 };

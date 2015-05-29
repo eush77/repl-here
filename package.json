@@ -1,7 +1,7 @@
 {
   "name": "repl-here",
   "version": "0.0.0",
-  "description": "Start the REPL and load the entire node_modules/ into it",
+  "description": "Start the REPL and load the entire ./node_modules/ into it",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
   "preferGlobal": true,

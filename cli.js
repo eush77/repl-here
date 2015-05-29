@@ -14,9 +14,11 @@ var usage = function (code) {
 
 var main = function () {
   var repl = Repl.start('> ');
-  replHere(repl, process.cwd(), function (err, module) {
-    console.error('Module failed to load: ' + module);
-  });
+  replHere(repl, process.cwd())
+    .on('fail', function (err, module) {
+      console.error('\rModule failed to load: ' + module);
+    })
+    .on('end', repl.displayPrompt.bind(repl));
 };
 
 

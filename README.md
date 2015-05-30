@@ -15,7 +15,7 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 Usage:  repl-here [-v | --verbose]
 ```
 
-`--verbose` flag prints a table describing how a particular module is named inside the REPL. Module names are effectively camel-cased versions of module names.
+`--verbose` flag prints a table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
 
 ## API
 

@@ -33,9 +33,14 @@
   ],
   "dependencies": {
     "camel-case": "^1.1.1",
+    "chalk": "^1.0.0",
     "help-version": "^0.2.0",
     "minimist": "^1.1.1",
+    "object-pairs": "^0.1.0",
     "resolve-from": "^1.0.0",
+    "string-length": "^1.0.0",
+    "table-header": "^0.2.0",
+    "text-table": "^0.2.0",
     "validate-npm-package-name": "^2.2.0"
   },
   "devDependencies": {}

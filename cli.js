@@ -4,7 +4,12 @@
 var replHere = require('./');
 
 var helpVersion = require('help-version')(usage()),
-    minimist = require('minimist');
+    minimist = require('minimist'),
+    textTable = require('text-table'),
+    pairs = require('object-pairs'),
+    chalk = require('chalk'),
+    tableHeader = require('table-header'),
+    stringLength = require('string-length');
 
 var Repl = require('repl');
 
@@ -23,26 +28,39 @@ var opts = minimist(process.argv.slice(2), {
 });
 
 
-var printNameTable = function (nameTable) {
-  Object.keys(nameTable).forEach(function (module) {
-    console.log('%s -> %s', module, nameTable[module]);
+var printNameTable = function (names) {
+  var table = pairs(names);
+
+  table.forEach(function (row) {
+    if (!row[1]) {
+      row[1] = chalk.red('(failed to load)');
+    }
   });
+
+  tableHeader.add(table, ['MODULE', 'VARIABLE'], { stringLength: stringLength });
+  table.push(table[1]);
+  console.log('\r' + textTable(table));
 };
 
 
 (function main() {
   var repl = Repl.start('> ');
-  var nameTable = {};
+  var names = {};
   replHere(repl, process.cwd())
     .on('load', function (module, name) {
-      nameTable[module] = name;
+      names[module] = name;
     })
     .on('fail', function (err, module) {
-      console.error('\rModule failed to load: ' + module);
+      if (opts.verbose) {
+        names[module] = false;
+      }
+      else {
+        console.error('\rModule failed to load: ' + module);
+      }
     })
     .on('end', function () {
       if (opts.verbose) {
-        printNameTable(nameTable);
+        printNameTable(names);
       }
       repl.displayPrompt();
     });

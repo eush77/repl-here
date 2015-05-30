@@ -44,8 +44,13 @@ var printNameTable = function (names) {
 
 
 (function main() {
-  var repl = Repl.start('> ');
+  var repl = Repl.start({
+    prompts: '> ',
+    useGlobal: true
+  });
+
   var names = {};
+
   replHere(repl, process.cwd())
     .on('load', function (module, name) {
       names[module] = name;

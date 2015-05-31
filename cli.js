@@ -9,7 +9,9 @@ var helpVersion = require('help-version')(usage()),
     pairs = require('object-pairs'),
     chalk = require('chalk'),
     tableHeader = require('table-header'),
-    stringLength = require('string-length');
+    stringLength = require('string-length'),
+    replHistory = require('repl.history'),
+    home = require('home-dir');
 
 var Repl = require('repl');
 
@@ -28,6 +30,13 @@ var opts = minimist(process.argv.slice(2), {
 });
 
 
+var loadHistory = function (repl) {
+  var historyFile = home('.node_history');
+  replHistory(repl, historyFile);
+  return repl;
+};
+
+
 var printNameTable = function (names) {
   var table = pairs(names);
 
@@ -44,10 +53,10 @@ var printNameTable = function (names) {
 
 
 (function main() {
-  var repl = Repl.start({
+  var repl = loadHistory(Repl.start({
     prompts: '> ',
     useGlobal: true
-  });
+  }));
 
   var names = {};
 

@@ -15,8 +15,10 @@ module.exports = function (repl, dir) {
 
   fs.readdir(path.join(dir, 'node_modules'), function (err, filenames) {
     if (err) {
-      ee.emit('error', err);
-      return;
+      if (err.code == 'ENOENT') {
+        return ee.emit('end');
+      }
+      return ee.emit('error', err);
     }
 
     filenames

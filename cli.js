@@ -37,8 +37,11 @@ var loadHistory = function (repl) {
 };
 
 
-var printNameTable = function (names) {
+var renderNameTable = function (names) {
   var table = pairs(names);
+  if (!table.length) {
+    return '';
+  }
 
   table.forEach(function (row) {
     if (!row[1]) {
@@ -48,7 +51,7 @@ var printNameTable = function (names) {
 
   tableHeader.add(table, ['MODULE', 'VARIABLE'], { stringLength: stringLength });
   table.push(table[1]);
-  console.log('\r' + textTable(table));
+  return textTable(table);
 };
 
 
@@ -74,7 +77,8 @@ var printNameTable = function (names) {
     })
     .on('end', function () {
       if (opts.verbose) {
-        printNameTable(names);
+        var table = renderNameTable(names);
+        console.log('\r' + (table || '(No modules found.)'));
       }
       repl.displayPrompt();
     });

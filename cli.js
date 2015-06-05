@@ -78,7 +78,7 @@ var renderNameTable = function (names) {
     .on('end', function () {
       if (opts.verbose) {
         var table = renderNameTable(names);
-        console.log('\r' + (table || '(No modules found.)'));
+        console.log('\r' + (table || chalk.dim('(No modules found.)')));
       }
       repl.displayPrompt();
     });

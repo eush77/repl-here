@@ -1,9 +1,8 @@
 'use strict';
 
-var isModuleName = require('./src/is-module-name');
-
-var camelCase = require('camel-case'),
-    resolveFrom = require('resolve-from');
+var acquire = require('acquire'),
+    mapKeys = require('map-keys'),
+    camelCase = require('camel-case');
 
 var fs = require('fs'),
     path = require('path'),
@@ -13,26 +12,21 @@ var fs = require('fs'),
 module.exports = function (repl, dir) {
   var ee = new EventEmitter;
 
-  fs.readdir(path.join(dir, 'node_modules'), function (err, filenames) {
-    if (err) {
-      if (err.code == 'ENOENT') {
-        return ee.emit('end');
-      }
-      return ee.emit('error', err);
-    }
+  process.nextTick(function () {
+    var modules = acquire.resolve({ basedir: dir,
+                                    skipFailures: ee.emit.bind(ee, 'fail') });
 
-    filenames
-      .filter(isModuleName)
-      .forEach(function (module) {
-        try {
-          var name = camelCase(module);
-          repl.context[name] = require(resolveFrom(dir, module));
-          ee.emit('load', module, name);
-        }
-        catch (e) {
-          ee.emit('fail', err, module);
-        }
-      });
+    modules = mapKeys(modules, camelCase);
+
+    Object.keys(modules).forEach(function (name) {
+      try {
+        repl.context[name] = require(modules[name]);
+        ee.emit('load', name, modules[name]);
+      }
+      catch (e) {
+        ee.emit('fail', name, modules[name]);
+      }
+    });
 
     ee.emit('end');
   });

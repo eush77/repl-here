@@ -7,7 +7,7 @@ var test = require('tape'),
     assign = require('object.assign');
 
 var Repl = require('repl'),
-    path = require('path');
+    Path = require('path');
 
 
 test(function (t) {
@@ -18,20 +18,24 @@ test(function (t) {
 
   var oldContext = assign({}, repl.context);
 
+  var fixtures = Path.join(__dirname, 'fixtures');
+  var root = Path.resolve(__dirname, '..');
+
   var loaded = ['module-as-directory', 'module-as-file.json'];
   var loadedName = ['moduleAsDirectory', 'moduleAsFile'];
   var failed = ['empty'];
 
-  replHere(repl, path.join(__dirname, 'fixtures'))
-    .on('fail', function (err, module) {
-      t.error(err, 'fails on a broken module');
-      t.notEqual(failed.indexOf(module), -1, 'fails on ' + module);
+  replHere(repl, fixtures)
+    .on('fail', function (name, path) {
+      t.notEqual(failed.indexOf(name), -1, 'fails on ' + name);
     })
 
-    .on('load', function (module, name) {
-      var i = loaded.indexOf(module);
-      t.notEqual(i, -1, 'loads ' + module);
-      t.equal(loadedName[i], name, 'loads ' + module + ' as ' + name);
+    .on('load', function (name, path) {
+      var dirname = Path.relative(fixtures, path).split(Path.sep, 2)[1];
+      var i = loaded.indexOf(dirname);
+      path = Path.relative(root, path);
+      t.notEqual(i, -1, 'loads ' + path);
+      t.equal(loadedName[i], name, 'loads ' + path + ' as ' + name);
     })
 
     .on('end', function () {

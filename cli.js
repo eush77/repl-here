@@ -13,7 +13,8 @@ var helpVersion = require('help-version')(usage()),
     replHistory = require('repl.history'),
     home = require('home-dir');
 
-var Repl = require('repl');
+var Repl = require('repl'),
+    Path = require('path');
 
 
 function usage() {
@@ -63,16 +64,20 @@ var renderNameTable = function (names) {
 
   var names = {};
 
+  var middleDir = function (path) {
+    return Path.relative(process.cwd(), path).split(Path.sep, 2)[1];
+  };
+
   replHere(repl, process.cwd())
-    .on('load', function (module, name) {
-      names[module] = name;
+    .on('load', function (name, path) {
+      names[middleDir(path)] = name;
     })
-    .on('fail', function (err, module) {
+    .on('fail', function (name, path) {
       if (opts.verbose) {
-        names[module] = false;
+        names[middleDir(path)] = false;
       }
       else {
-        console.error('\rModule failed to load: ' + module);
+        console.error('\rModule failed to load: ' + name);
       }
     })
     .on('end', function () {

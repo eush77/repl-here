@@ -28,18 +28,18 @@ Returns EventEmitter.
 ### Event: `load`
 
 ```
-ee.on('fail', function(module, name))
+ee.on('fail', function(name, path))
 ```
 
-Emitted if `module` is loaded as `name`.
+Emitted if module `name` is loaded from `path`.
 
 ### Event: `fail`
 
 ```
-ee.on('fail', function(err, module))
+ee.on('fail', function(name, path))
 ```
 
-Emitted whenever `module` fails to load.
+Emitted whenever module `name` fails to load.
 
 ### Event: `end`
 

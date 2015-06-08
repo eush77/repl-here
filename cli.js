@@ -11,7 +11,8 @@ var helpVersion = require('help-version')(usage()),
     tableHeader = require('table-header'),
     stringLength = require('string-length'),
     replHistory = require('repl.history'),
-    home = require('home-dir');
+    home = require('home-dir'),
+    findRoot = require('find-root');
 
 var Repl = require('repl'),
     Path = require('path');
@@ -64,17 +65,19 @@ var renderNameTable = function (names) {
 
   var names = {};
 
-  var middleDir = function (path) {
-    return Path.relative(process.cwd(), path).split(Path.sep, 2)[1];
+  var packageName = function (path) {
+    return Path.basename(Path.dirname(path)) == 'node_modules'
+      ? Path.basename(path) // node_modules/file.js
+      : Path.basename(findRoot(path)); // node_modules/module/src/index.js
   };
 
   replHere(repl, process.cwd())
     .on('load', function (name, path) {
-      names[middleDir(path)] = name;
+      names[packageName(path)] = name;
     })
     .on('fail', function (name, path) {
       if (opts.verbose) {
-        names[middleDir(path)] = false;
+        names[packageName(path)] = false;
       }
       else {
         console.error('\rModule failed to load: ' + name);

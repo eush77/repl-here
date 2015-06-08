@@ -6,7 +6,7 @@ var acquire = require('acquire'),
 
 var fs = require('fs'),
     path = require('path'),
-    EventEmitter = require('events');
+    EventEmitter = require('events').EventEmitter;
 
 
 module.exports = function (repl, dir) {

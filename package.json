@@ -8,6 +8,9 @@
   "bin": {
     "repl-here": "cli.js"
   },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
   "files": [
     "cli.js",
     "index.js",
@@ -45,5 +48,9 @@
     "text-table": "^0.2.0",
     "validate-npm-package-name": "^2.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "object.assign": "^3.0.0",
+    "tape": "^4.0.0",
+    "through2": "^0.6.5"
+  }
 }

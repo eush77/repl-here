@@ -2,7 +2,7 @@
 
 # repl-here
 
-[![Dependency Status][david-badge]][david]
+[![Build Status](https://travis-ci.org/eush77/repl-here.svg?branch=master)](https://travis-ci.org/eush77/repl-here) [![Dependency Status][david-badge]][david]
 
 Node REPL that autoloads all modules in `./node_modules/` at startup, just like core libs.
 

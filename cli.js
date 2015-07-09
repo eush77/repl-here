@@ -19,13 +19,22 @@ var Repl = require('repl'),
 
 
 function usage() {
-  return 'Usage:  repl-here [-v | --verbose]';
+  return [
+    'Usage:  repl-here [OPTION]...',
+    '',
+    'Options:',
+    '  --verbose, -v    Print name table.',
+    '  --load-main, -l  Load module at current working directory.'
+  ].join('\n');
 }
 
 
 var opts = minimist(process.argv.slice(2), {
-  boolean: 'verbose',
-  alias: { v: 'verbose' },
+  boolean: ['verbose', 'load-main'],
+  alias: {
+    verbose: 'v',
+    'load-main': 'l'
+  },
   unknown: function () {
     helpVersion.help(1);
   }
@@ -71,7 +80,7 @@ var renderNameTable = function (names) {
       : Path.basename(findRoot(path)); // node_modules/module/src/index.js
   };
 
-  replHere(repl, process.cwd())
+  replHere(repl, process.cwd(), opts['load-main'])
     .on('load', function (name, path) {
       names[packageName(path)] = name;
     })

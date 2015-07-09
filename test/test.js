@@ -10,6 +10,10 @@ var Repl = require('repl'),
     Path = require('path');
 
 
+var fixtures = Path.join(__dirname, 'fixtures');
+var root = Path.resolve(__dirname, '..');
+
+
 test(function (t) {
   var repl = Repl.start({
     input: through(),
@@ -17,9 +21,6 @@ test(function (t) {
   });
 
   var oldContext = assign({}, repl.context);
-
-  var fixtures = Path.join(__dirname, 'fixtures');
-  var root = Path.resolve(__dirname, '..');
 
   var loaded = ['module-as-directory', 'module-as-file.json'];
   var loadedName = ['moduleAsDirectory', 'moduleAsFile'];
@@ -56,5 +57,24 @@ test(function (t) {
         t.end();
       });
       t.end();
+    });
+});
+
+
+test('load-main', function (t) {
+  var repl = Repl.start({
+    input: through(),
+    output: through()
+  });
+
+  t.plan(3);
+
+  replHere(repl, fixtures, true)
+    .on('load', function (name, path) {
+      if (name == 'fixtures') {
+        t.pass('loads main module at the working dir');
+        t.equal(Path.relative(root, path), 'test/fixtures/index.json', 'path');
+        t.equal(repl.context.fixtures, true, 'content');
+      }
     });
 });

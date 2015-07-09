@@ -12,16 +12,22 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 ## CLI
 
 ```
-Usage:  repl-here [-v | --verbose]
+Usage:  repl-here [OPTION]...
+
+Options:
+  --verbose, -v    Print name table.
+  --load-main, -l  Load module at current working directory.
 ```
 
 `--verbose` flag prints a table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
 
+`--load-main` loads main module at `process.cwd()` as `path.basename(process.cwd())`.
+
 ## API
 
-### `ee = replHere(repl, basedir)`
+### `ee = replHere(repl, basedir, [loadMain=false])`
 
-Require all modules from `$basedir/node_modules` into the repl (first argument).
+Require all modules from `$basedir/node_modules` (and optionally `$basedir` itself) into the repl (first argument).
 
 Returns EventEmitter.
 

@@ -9,12 +9,16 @@ var fs = require('fs'),
     EventEmitter = require('events').EventEmitter;
 
 
-module.exports = function (repl, dir) {
+module.exports = function (repl, dir, loadMain) {
   var ee = new EventEmitter;
 
   process.nextTick(function () {
     var modules = acquire.resolve({ basedir: dir,
                                     skipFailures: ee.emit.bind(ee, 'fail') });
+
+    if (loadMain) {
+      modules[path.basename(dir)] = require.resolve(dir);
+    }
 
     modules = mapKeys(modules, camelCase);
 

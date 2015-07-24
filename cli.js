@@ -12,7 +12,8 @@ var helpVersion = require('help-version')(usage()),
     stringLength = require('string-length'),
     replHistory = require('repl.history'),
     home = require('home-dir'),
-    findRoot = require('find-root');
+    findRoot = require('find-root'),
+    cmpby = require('cmpby');
 
 var Repl = require('repl'),
     Path = require('path');
@@ -49,7 +50,10 @@ var loadHistory = function (repl) {
 
 
 var renderNameTable = function (names) {
-  var table = pairs(names);
+  var table = pairs(names).sort(cmpby(function (row) {
+    return row[0];
+  }));
+
   if (!table.length) {
     return '';
   }

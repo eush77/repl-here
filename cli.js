@@ -63,9 +63,21 @@ var renderNameTable = function (names) {
     return '';
   }
 
+  var types = {
+    failed: {
+      color: 'red',
+      message: 'failed to load'
+    },
+    ignored: {
+      color: 'yellow',
+      message: 'ignored'
+    }
+  };
+
   table.forEach(function (row) {
-    if (!row[1]) {
-      row[1] = chalk.red('(failed to load)');
+    if (typeof row[1] == 'object') {
+      var type = types[row[1].type];
+      row[1] = chalk[type.color]('(' + type.message + ')');
     }
   });
 
@@ -89,13 +101,18 @@ var renderNameTable = function (names) {
       : Path.basename(findRoot(path)); // node_modules/module/src/index.js
   };
 
+  (typeof opts.ignore == 'string' ? [opts.ignore] : opts.ignore || [])
+    .forEach(function (name) {
+      names[name] = { type: 'ignored' };
+    });
+
   replHere(repl, process.cwd(), opts)
     .on('load', function (name, path) {
       names[packageName(path)] = name;
     })
     .on('fail', function (name, path) {
       if (opts.verbose) {
-        names[packageName(path)] = false;
+        names[packageName(path)] = { type: 'failed' };
       }
       else {
         console.error('\rModule failed to load: ' + name);

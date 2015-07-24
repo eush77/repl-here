@@ -78,3 +78,22 @@ test('load-main', function (t) {
       }
     });
 });
+
+
+test('ignore', function (t) {
+  var repl = Repl.start({
+    input: through(),
+    output: through()
+  });
+
+  var loaded;
+  t.plan(1);
+
+  replHere(repl, fixtures, { ignore: 'module-as-file' })
+    .on('load', function (name, path) {
+      loaded = loaded || name == 'moduleAsFile';
+    })
+    .on('end', function () {
+      t.false(loaded, 'ignores module');
+    });
+});

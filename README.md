@@ -16,17 +16,17 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 Options:
 
 <dl>
-<dt>`-v, --verbose`</dt>
+<dt><code>-v, --verbose</code></dt>
 <dd>
 Print a name table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
 </dd>
 
-<dt>`-l, --load-main`</dt>
+<dt><code>-l, --load-main</code></dt>
 <dd>
 Loads main module at the current working directory.
 </dd>
 
-<dt>`-i MODULE, --ignore=MODULE`</dt>
+<dt><code>-i MODULE, --ignore=MODULE</code></dt>
 <dd>
 Ignore module by name.
 </dd>

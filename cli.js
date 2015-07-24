@@ -13,7 +13,9 @@ var helpVersion = require('help-version')(usage()),
     replHistory = require('repl.history'),
     home = require('home-dir'),
     findRoot = require('find-root'),
-    cmpby = require('cmpby');
+    cmpby = require('cmpby'),
+    mapKeys = require('map-keys'),
+    camelCase = require('camel-case');
 
 var Repl = require('repl'),
     Path = require('path');
@@ -24,22 +26,25 @@ function usage() {
     'Usage:  repl-here [OPTION]...',
     '',
     'Options:',
-    '  --verbose, -v    Print name table.',
-    '  --load-main, -l  Load module at current working directory.'
+    '  -v, --verbose               Print name table.',
+    '  -l, --load-main             Load module at current working directory.',
+    '  -i MODULE, --ignore=MODULE  Ignore module by name.'
   ].join('\n');
 }
 
 
-var opts = minimist(process.argv.slice(2), {
+var opts = mapKeys(minimist(process.argv.slice(2), {
   boolean: ['verbose', 'load-main'],
+  string: ['ignore'],
   alias: {
     verbose: 'v',
-    'load-main': 'l'
+    'load-main': 'l',
+    ignore: 'i'
   },
   unknown: function () {
     helpVersion.help(1);
   }
-});
+}), camelCase);
 
 
 var loadHistory = function (repl) {
@@ -70,7 +75,7 @@ var renderNameTable = function (names) {
 };
 
 
-(function main() {
+(function main(opts) {
   var repl = loadHistory(Repl.start({
     prompts: '> ',
     useGlobal: true
@@ -84,7 +89,7 @@ var renderNameTable = function (names) {
       : Path.basename(findRoot(path)); // node_modules/module/src/index.js
   };
 
-  replHere(repl, process.cwd(), opts['load-main'])
+  replHere(repl, process.cwd(), opts)
     .on('load', function (name, path) {
       names[packageName(path)] = name;
     })
@@ -103,4 +108,4 @@ var renderNameTable = function (names) {
       }
       repl.displayPrompt();
     });
-}());
+}(opts));

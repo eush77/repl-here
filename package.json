@@ -34,7 +34,7 @@
     "quick"
   ],
   "dependencies": {
-    "acquire": "^0.3.0",
+    "acquire": "^0.4.0",
     "camel-case": "^1.1.1",
     "chalk": "^1.0.0",
     "cmpby": "^0.1.0",

@@ -9,14 +9,16 @@ var fs = require('fs'),
     EventEmitter = require('events').EventEmitter;
 
 
-module.exports = function (repl, dir, loadMain) {
+module.exports = function (repl, dir, opts) {
+  opts = opts || {};
   var ee = new EventEmitter;
 
   process.nextTick(function () {
     var modules = acquire.resolve({ basedir: dir,
+                                    ignore: opts.ignore,
                                     skipFailures: ee.emit.bind(ee, 'fail') });
 
-    if (loadMain) {
+    if (opts.loadMain) {
       modules[path.basename(dir)] = require.resolve(dir);
     }
 

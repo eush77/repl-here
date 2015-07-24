@@ -15,8 +15,9 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 Usage:  repl-here [OPTION]...
 
 Options:
-  --verbose, -v    Print name table.
-  --load-main, -l  Load module at current working directory.
+  -v, --verbose               Print name table.
+  -l, --load-main             Load module at current working directory.
+  -i MODULE, --ignore=MODULE  Ignore module by name.
 ```
 
 `--verbose` flag prints a table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
@@ -25,11 +26,25 @@ Options:
 
 ## API
 
-### `ee = replHere(repl, basedir, [loadMain=false])`
+### `ee = replHere(repl, basedir, [opts])`
 
-Require all modules from `$basedir/node_modules` (and optionally `$basedir` itself) into the repl (first argument).
+Require all modules from `basedir/node_modules` into the repl (first argument).
 
 Returns EventEmitter.
+
+#### `opts.loadMain`
+
+Type: `Boolean`<br>
+Default: `false`
+
+Whether main module should be required from `basedir`.
+
+#### `opts.ignore`
+
+Type: `String` or `[String]`<br>
+Default: `[]`
+
+Module name or list of module names to ignore.
 
 ### Event: `load`
 

@@ -11,18 +11,26 @@ Node REPL that autoloads all modules in `./node_modules/` at startup, just like 
 
 ## CLI
 
-```
-Usage:  repl-here [OPTION]...
+### `Usage:  repl-here [OPTION]...`
 
 Options:
-  -v, --verbose               Print name table.
-  -l, --load-main             Load module at current working directory.
-  -i MODULE, --ignore=MODULE  Ignore module by name.
-```
 
-`--verbose` flag prints a table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
+<dl>
+<dt>`-v, --verbose`</dt>
+<dd>
+Print a name table describing how a particular module is named inside the REPL. Variable names are effectively camel-cased versions of module names.
+</dd>
 
-`--load-main` loads main module at `process.cwd()` as `path.basename(process.cwd())`.
+<dt>`-l, --load-main`</dt>
+<dd>
+Loads main module at the current working directory.
+</dd>
+
+<dt>`-i MODULE, --ignore=MODULE`</dt>
+<dd>
+Ignore module by name.
+</dd>
+</dl>
 
 ## API
 

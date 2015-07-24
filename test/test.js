@@ -69,7 +69,7 @@ test('load-main', function (t) {
 
   t.plan(3);
 
-  replHere(repl, fixtures, true)
+  replHere(repl, fixtures, { loadMain: true })
     .on('load', function (name, path) {
       if (name == 'fixtures') {
         t.pass('loads main module at the working dir');

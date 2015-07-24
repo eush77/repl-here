@@ -23,7 +23,7 @@ Print a name table describing how a particular module is named inside the REPL. 
 
 <dt><code>-l, --load-main</code></dt>
 <dd>
-Loads main module at the current working directory.
+Load main module at the current working directory.
 </dd>
 
 <dt><code>-i MODULE, --ignore=MODULE</code></dt>

@@ -19,7 +19,13 @@ module.exports = function (repl, dir, opts) {
                                     skipFailures: ee.emit.bind(ee, 'fail') });
 
     if (opts.loadMain) {
-      modules[path.basename(dir)] = require.resolve(dir);
+      try {
+        var name = path.basename(dir);
+        modules[name] = require.resolve(dir);
+      }
+      catch (e) {
+        ee.emit('fail', name, dir);
+      }
     }
 
     modules = mapKeys(modules, camelCase);
